@@ -1,0 +1,8 @@
+{
+	"env": {
+		"es2022": true
+	},
+	"extends": ["@opi-pib/base", "plugin:jest/recommended"],
+	"plugins": ["jest"],
+	"rules": {}
+}
