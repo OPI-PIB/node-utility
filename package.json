@@ -1,6 +1,6 @@
 {
 	"name": "@opi_pib/node-utility",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Node utility",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -26,19 +26,19 @@
 		"node-http-proxy-json": "^0.1.9"
 	},
 	"devDependencies": {
-		"@opi_pib/eslint-config-base": "1.0.5",
-		"@types/fs-extra": "^9.0.13",
+		"@opi_pib/eslint-config-base": "1.0.6",
+		"@types/fs-extra": "^11.0.1",
 		"@types/http-proxy": "^1.17.9",
-		"@types/jest": "^29.2.3",
-		"@typescript-eslint/eslint-plugin": "^5.45.0",
-		"axios": "^1.2.0",
-		"eslint": "^8.28.0",
+		"@types/jest": "^29.2.5",
+		"@typescript-eslint/eslint-plugin": "^5.48.1",
+		"axios": "^1.2.2",
+		"eslint": "^8.31.0",
 		"eslint-plugin-import": "^2.26.0",
-		"eslint-plugin-jest": "^27.1.6",
+		"eslint-plugin-jest": "^27.2.1",
 		"http-proxy": "^1.18.1",
 		"jest": "^29.3.1",
 		"ts-jest": "^29.0.3",
-		"typescript": "~4.8.2"
+		"typescript": "~4.9.4"
 	},
 	"repository": {
 		"type": "git",
