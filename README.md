@@ -1,5 +1,16 @@
 # Node Utility
 
+-   [Install](#install)
+-   [Notify](#notify)
+-   [HttpProxyMiddleware](#httpproxymiddleware)
+-   [HttpAdapters](#httpadapters)
+
+## Install
+
+```
+npm install @opi_pib/node-utility
+```
+
 ## Notify
 
 Simple wrapper around [chalk](https://www.npmjs.com/package/chalk)
