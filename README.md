@@ -126,5 +126,5 @@ const result = HttpAdapters.stringify({
 	e: null,
 });
 
-expect("a=b&c=1").toEqual(result);
+expect('{"a":"b","c":1}').toEqual(result);
 ```
