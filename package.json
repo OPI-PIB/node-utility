@@ -1,6 +1,6 @@
 {
 	"name": "@opi_pib/node-utility",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"description": "Node utility",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -30,7 +30,7 @@
 		"qs": "^6.11.0"
 	},
 	"devDependencies": {
-		"@opi_pib/eslint-config-base": "1.0.6",
+		"@opi_pib/eslint-config-base": "1.0.7",
 		"@types/express": "^4.17.16",
 		"@types/fs-extra": "^11.0.1",
 		"@types/http-proxy": "^1.17.9",
@@ -42,7 +42,7 @@
 		"eslint-plugin-import": "^2.27.5",
 		"eslint-plugin-jest": "^27.2.1",
 		"http-proxy": "^1.18.1",
-		"jest": "^29.3.1",
+		"jest": "^29.4.0",
 		"ts-jest": "^29.0.5",
 		"typescript": "~4.9.4"
 	},
