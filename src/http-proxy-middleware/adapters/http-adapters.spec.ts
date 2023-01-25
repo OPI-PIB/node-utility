@@ -20,10 +20,10 @@ describe('HttpAdapters', () => {
 
 	it('toQueryString', async () => {
 		const result = HttpAdapters.toQueryString({
-			a: 'b', c: 1, d: undefined, e: null,
+			a: 'b', c: 1, d: false, e: undefined, f: null,
 		});
 
-		expect('a=b&c=1').toEqual(result);
+		expect('a=b&c=1&d=false').toEqual(result);
 	});
 
 	describe('Modify response', () => {
