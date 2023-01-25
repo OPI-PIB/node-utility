@@ -1,6 +1,5 @@
 import { Is } from '@opi_pib/ts-utility';
 import { readFileSync, readJsonSync } from 'fs-extra';
-import { stringify } from 'qs';
 
 import { Notify } from '../../notify';
 import { IncomingMessage, ServerResponse } from '../proxy-params';
@@ -74,8 +73,15 @@ export class HttpAdapters {
 	/**
 	 * Convert object into queryString
 	 */
-	static toQueryString(obj: Record<string, string | number | undefined | null>): string {
-		return stringify(Object.fromEntries(Object.entries(obj).filter(([key, value]) => value != null)));
+	static toQueryString(obj: Record<string, string | number | boolean | undefined | null>): string {
+		const body = { ...obj };
+
+		return Object.entries(body)
+			.filter(([key, value]) => Is.defined(value))
+			.map(
+				([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string | number | boolean)}`,
+			)
+			.join('&');
 	}
 
 	/**
@@ -84,10 +90,12 @@ export class HttpAdapters {
 	static stringify(body: Record<string, any>): string {
 		let stringifiedBody: string = '';
 
-		try {
-			stringifiedBody = JSON.stringify(Object.fromEntries(Object.entries(body).filter(([key, value]) => value != null)));
-		} catch (e) {
-			Notify.error({ message: "Can't stringify body" });
+		if (body !== null && body !== undefined) {
+			try {
+				stringifiedBody = JSON.stringify(Object.fromEntries(Object.entries(body).filter(([key, value]) => Is.defined(value))));
+			} catch (e) {
+				Notify.error({ message: "Can't stringify body" });
+			}
 		}
 
 		return stringifiedBody;
