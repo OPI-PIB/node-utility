@@ -1,6 +1,6 @@
 {
 	"name": "@opi_pib/node-utility",
-	"version": "1.1.9",
+	"version": "1.1.10",
 	"description": "Node utility",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -21,7 +21,7 @@
 	"author": "Dawid Lubowiecki",
 	"license": "MIT",
 	"dependencies": {
-		"@opi_pib/ts-utility": "1.1.9",
+		"@opi_pib/ts-utility": "1.1.11",
 		"@types/express": "^4.17.20",
 		"chalk": "^4.1.2",
 		"express": "^4.18.2",
@@ -30,8 +30,8 @@
 		"node-http-proxy-json": "^0.1.9"
 	},
 	"devDependencies": {
-		"@opi_pib/eslint-config-base": "1.0.12",
-		"@types/fs-extra": "^11.0.2",
+		"@opi_pib/eslint-config-base": "1.0.15",
+		"@types/fs-extra": "^11.0.3",
 		"@types/http-proxy": "^1.17.13",
 		"@types/jest": "^29.5.6",
 		"@typescript-eslint/eslint-plugin": "^6.8.0",

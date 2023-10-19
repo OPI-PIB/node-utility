@@ -6,7 +6,7 @@ interface NotifyProps {
 }
 
 export class Notify {
-	private constructor() { }
+	private constructor() {}
 
 	/**
 	 * Display info message
@@ -40,7 +40,9 @@ export class Notify {
 
 		if (message) {
 			// eslint-disable-next-line no-console
-			console.log(`${chalk.black.bgYellowBright(' Warning ')} ${message}`);
+			console.log(
+				`${chalk.black.bgYellowBright(' Warning ')} ${message}`,
+			);
 		}
 	}
 
