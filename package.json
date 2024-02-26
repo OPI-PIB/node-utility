@@ -1,6 +1,6 @@
 {
 	"name": "@opi_pib/node-utility",
-	"version": "1.1.12",
+	"version": "1.1.13",
 	"description": "Node utility",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -21,28 +21,28 @@
 	"author": "Dawid Lubowiecki",
 	"license": "MIT",
 	"dependencies": {
-		"@opi_pib/ts-utility": "1.1.13",
+		"@opi_pib/ts-utility": "1.1.14",
 		"@types/express": "^4.17.21",
 		"chalk": "^4.1.2",
 		"express": "^4.18.2",
-		"fs-extra": "^11.1.1",
+		"fs-extra": "^11.2.0",
 		"http-proxy-middleware": "^2.0.6",
 		"node-http-proxy-json": "^0.1.9"
 	},
 	"devDependencies": {
-		"@opi_pib/eslint-config-base": "1.0.17",
+		"@opi_pib/eslint-config-base": "1.0.18",
 		"@types/fs-extra": "^11.0.4",
 		"@types/http-proxy": "^1.17.14",
-		"@types/jest": "^29.5.8",
-		"@typescript-eslint/eslint-plugin": "^6.11.0",
-		"axios": "^1.6.1",
-		"eslint": "^8.53.0",
-		"eslint-plugin-import": "^2.29.0",
-		"eslint-plugin-jest": "^27.6.0",
+		"@types/jest": "^29.5.12",
+		"@typescript-eslint/eslint-plugin": "^7.0.2",
+		"axios": "^1.6.7",
+		"eslint": "^8.57.0",
+		"eslint-plugin-import": "^2.29.1",
+		"eslint-plugin-jest": "^27.9.0",
 		"http-proxy": "^1.18.1",
 		"jest": "^29.7.0",
-		"ts-jest": "^29.1.1",
-		"typescript": "~5.2.2"
+		"ts-jest": "^29.1.2",
+		"typescript": "~5.3.2"
 	},
 	"repository": {
 		"type": "git",
