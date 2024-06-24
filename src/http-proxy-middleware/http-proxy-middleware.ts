@@ -1,5 +1,7 @@
 import {
-	createProxyMiddleware, Filter, RequestHandler,
+	createProxyMiddleware,
+	Filter,
+	RequestHandler,
 } from 'http-proxy-middleware';
 
 import { HttpAdapters } from './adapters/http-adapters';
@@ -11,22 +13,22 @@ export class HttpProxyMiddleware {
 	/**
 	 * Creates proxy middleware for express server
 	 */
-	static create(context: Filter | ProxyOptions, options?: ProxyOptions | undefined): RequestHandler {
+	static create(
+		context: Filter | ProxyOptions,
+		options?: ProxyOptions | undefined
+	): RequestHandler {
 		return createProxyMiddleware(context, options);
 	}
 
 	/**
 	 * Parse and write body of request
 	 */
-	static writeParsedBody(
-		proxyReq: ClientRequest,
-		req: ProxyRequest,
-	): void {
+	static writeParsedBody(proxyReq: ClientRequest, req: ProxyRequest): void {
 		if (!req.body || !Object.keys(req.body).length) {
 			return;
 		}
 
-		let newBody: string = '';
+		let newBody = '';
 
 		const contentType = req.headers['content-type'] || '';
 

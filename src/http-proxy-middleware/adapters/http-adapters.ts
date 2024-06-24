@@ -13,12 +13,17 @@ export class HttpAdapters {
 	static replaceResponseBody(
 		newBody: unknown,
 		proxyRes: IncomingMessage,
-		res: ServerResponse,
+		res: ServerResponse
 	) {
 		if (Is.object(newBody)) {
-			modifyResponse(res, proxyRes, () => HttpAdapters.stringify(newBody));
+			modifyResponse(res, proxyRes, () =>
+				HttpAdapters.stringify(newBody)
+			);
 		} else if (Is.boolean(newBody)) {
-			res.writeHead(200, { ...proxyRes.headers, 'Content-Type': 'application/json' });
+			res.writeHead(200, {
+				...proxyRes.headers,
+				'Content-Type': 'application/json',
+			});
 			res.write(JSON.stringify(newBody));
 			res.end();
 		} else {
@@ -32,10 +37,10 @@ export class HttpAdapters {
 	static replaceResponseBodyFromJsonFile(
 		newBodyUrl: string,
 		proxyRes: IncomingMessage,
-		res: ServerResponse,
+		res: ServerResponse
 	) {
 		modifyResponse(res, proxyRes, () => {
-			let stringifiedBody: string = '';
+			let stringifiedBody = '';
 
 			try {
 				const file = readJsonSync(newBodyUrl);
@@ -56,7 +61,7 @@ export class HttpAdapters {
 	static replaceResponseBodyFromFile(
 		fileUrl: string,
 		proxyRes: IncomingMessage,
-		res: ServerResponse,
+		res: ServerResponse
 	) {
 		try {
 			const file = readFileSync(fileUrl);
@@ -73,13 +78,18 @@ export class HttpAdapters {
 	/**
 	 * Convert object into queryString
 	 */
-	static toQueryString(obj: Record<string, string | number | boolean | undefined | null>): string {
+	static toQueryString(
+		obj: Record<string, string | number | boolean | undefined | null>
+	): string {
 		const body = { ...obj };
 
 		return Object.entries(body)
 			.filter(([key, value]) => Is.defined(value))
 			.map(
-				([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string | number | boolean)}`,
+				([key, value]) =>
+					`${encodeURIComponent(key)}=${encodeURIComponent(
+						value as string | number | boolean
+					)}`
 			)
 			.join('&');
 	}
@@ -88,11 +98,17 @@ export class HttpAdapters {
 	 * Stringify value
 	 */
 	static stringify(body: Record<string, any>): string {
-		let stringifiedBody: string = '';
+		let stringifiedBody = '';
 
 		if (body !== null && body !== undefined) {
 			try {
-				stringifiedBody = JSON.stringify(Object.fromEntries(Object.entries(body).filter(([key, value]) => Is.defined(value))));
+				stringifiedBody = JSON.stringify(
+					Object.fromEntries(
+						Object.entries(body).filter(([key, value]) =>
+							Is.defined(value)
+						)
+					)
+				);
 			} catch (e) {
 				Notify.error({ message: "Can't stringify body" });
 			}

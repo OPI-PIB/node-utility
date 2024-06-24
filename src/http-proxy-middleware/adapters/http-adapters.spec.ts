@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import http from 'http';
 
 import httpProxy from 'http-proxy';
@@ -11,16 +10,23 @@ const TARGET_SERVER_PORT = 5005;
 describe('HttpAdapters', () => {
 	it('stringify', async () => {
 		const result = HttpAdapters.stringify({
-			a: 'b', c: 1, d: undefined, e: null,
+			a: 'b',
+			c: 1,
+			d: undefined,
+			e: null,
 		});
 
 		// eslint-disable-next-line no-useless-escape
-		expect('{\"a\":\"b\",\"c\":1}').toEqual(result);
+		expect('{"a":"b","c":1}').toEqual(result);
 	});
 
 	it('toQueryString', async () => {
 		const result = HttpAdapters.toQueryString({
-			a: 'b', c: 1, d: false, e: undefined, f: null,
+			a: 'b',
+			c: 1,
+			d: false,
+			e: undefined,
+			f: null,
 		});
 
 		expect('a=b&c=1&d=false').toEqual(result);
@@ -51,7 +57,7 @@ describe('HttpAdapters', () => {
 							name: 'node-http-proxy-json',
 							age: 1,
 							version: '1.0.0',
-						}),
+						})
 					);
 					res.end();
 				})
@@ -67,15 +73,21 @@ describe('HttpAdapters', () => {
 		describe('json', () => {
 			beforeEach(() => {
 				proxy.on('proxyRes', (proxyRes, req, res) => {
-					HttpAdapters.replaceResponseBody({
-						name: 'node-http-proxy-json',
-						age: 2,
-					}, proxyRes, res);
+					HttpAdapters.replaceResponseBody(
+						{
+							name: 'node-http-proxy-json',
+							age: 2,
+						},
+						proxyRes,
+						res
+					);
 				});
 			});
 
 			it('modify response successfully', async () => {
-				const result = await axios.get(`http://localhost:${SERVER_PORT}`);
+				const result = await axios.get(
+					`http://localhost:${SERVER_PORT}`
+				);
 
 				expect(result.data).toEqual({
 					name: 'node-http-proxy-json',
@@ -92,7 +104,9 @@ describe('HttpAdapters', () => {
 			});
 
 			it('modify response successfully', async () => {
-				const result = await axios.get(`http://localhost:${SERVER_PORT}`);
+				const result = await axios.get(
+					`http://localhost:${SERVER_PORT}`
+				);
 
 				expect(result.data).toEqual('');
 			});
@@ -106,7 +120,9 @@ describe('HttpAdapters', () => {
 			});
 
 			it('modify response successfully', async () => {
-				const result = await axios.get(`http://localhost:${SERVER_PORT}`);
+				const result = await axios.get(
+					`http://localhost:${SERVER_PORT}`
+				);
 
 				expect(result.data).toEqual('');
 			});
@@ -120,7 +136,9 @@ describe('HttpAdapters', () => {
 			});
 
 			it('modify response successfully', async () => {
-				const result = await axios.get(`http://localhost:${SERVER_PORT}`);
+				const result = await axios.get(
+					`http://localhost:${SERVER_PORT}`
+				);
 
 				expect(result.data).toEqual(true);
 			});
@@ -134,7 +152,9 @@ describe('HttpAdapters', () => {
 			});
 
 			it('modify response successfully', async () => {
-				const result = await axios.get(`http://localhost:${SERVER_PORT}`);
+				const result = await axios.get(
+					`http://localhost:${SERVER_PORT}`
+				);
 
 				expect(result.data).toEqual(false);
 			});
