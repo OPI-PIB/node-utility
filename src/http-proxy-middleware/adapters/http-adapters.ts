@@ -20,11 +20,19 @@ export class HttpAdapters {
 				HttpAdapters.stringify(newBody)
 			);
 		} else if (Is.boolean(newBody)) {
-			res.writeHead(200, {
+			const bodyString = JSON.stringify(newBody);
+			const headers = {
 				...proxyRes.headers,
 				'Content-Type': 'application/json',
-			});
-			res.write(JSON.stringify(newBody));
+			};
+			if (headers['transfer-encoding']) {
+				delete headers['content-length'];
+			} else {
+				headers['content-length'] = `${Buffer.byteLength(bodyString)}`;
+			}
+
+			res.writeHead(200, headers);
+			res.write(bodyString);
 			res.end();
 		} else {
 			modifyResponse(res, proxyRes, () => newBody);
