@@ -1,6 +1,6 @@
 {
 	"name": "@opi_pib/node-utility",
-	"version": "2.2.0",
+	"version": "2.3.0",
 	"description": "Node utility",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -22,6 +22,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@opi_pib/ts-utility": "^2.0.0",
+		"@types/express": "^4.0.0",
 		"chalk": "^4.0.0",
 		"express": "^4.0.0",
 		"fs-extra": "^11.3.0",
@@ -30,7 +31,6 @@
 	},
 	"devDependencies": {
 		"@opi_pib/eslint-config-base": "^9.0.0",
-		"@types/express": "^4.0.0",
 		"@types/fs-extra": "^11.0.0",
 		"@types/http-proxy": "^1.0.0",
 		"@types/jest": "^30.0.0",
