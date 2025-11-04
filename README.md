@@ -1,9 +1,9 @@
 # Node Utility
 
--   [Install](#install)
--   [Notify](#notify)
--   [HttpProxyMiddleware](#httpproxymiddleware)
--   [HttpAdapters](#httpadapters)
+- [Install](#install)
+- [Notify](#notify)
+- [HttpProxyMiddleware](#httpproxymiddleware)
+- [HttpAdapters](#httpadapters)
 
 ## Install
 
@@ -13,15 +13,13 @@ npm install @opi_pib/node-utility
 
 ## Notify
 
-Simple wrapper around [chalk](https://www.npmjs.com/package/chalk)
-
 ### Usage
 
 ```javascript
-Notify.success({ message: "message" });
-Notify.warning({ message: "message" });
-Notify.info({ message: "message" });
-Notify.error({ message: "message", error: new Error("Some error") });
+Notify.success({ message: 'message' });
+Notify.warning({ message: 'message' });
+Notify.info({ message: 'message' });
+Notify.error({ message: 'message', error: new Error('Some error') });
 ```
 
 ## HttpProxyMiddleware
@@ -31,23 +29,11 @@ Proxy middleware for express server
 ### Usage
 
 ```javascript
-const app = express();
+import { HttpProxyMiddleware } from '@opi_pib/node-utility';
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+const handlers = [SystemInfo.processRes];
 
-const proxyOptions: ProxyOptions = {
-	target: "http://127.0.0.1:4010",
-	changeOrigin: true,
-	onProxyReq(proxyReq, req, res, options) {
-		HttpProxyMiddleware.writeParsedBody(proxyReq, req);
-	},
-	onProxyRes(proxyRes, req, res) {},
-};
-
-app.use("/", HttpProxyMiddleware.create(proxyOptions));
-
-app.listen(4011);
+HttpProxyMiddleware.run(3010, 3011, handlers);
 ```
 
 ## HttpAdapters
@@ -59,13 +45,22 @@ Replace response with new value of body
 #### Usage
 
 ```javascript
-processRes(
-	proxyRes: IncomingMessage,
-	req: ProxyRequest,
-	res: ServerResponse,
-): void {
-	if (req._parsedUrl?.pathname.match('^/user$') && req.method === 'GET') {
-		HttpAdapters.replaceResponseBody(userDto, proxyRes, res);
+import {
+	HttpAdapters,
+	IncomingMessage,
+	ProxyRequest,
+	ServerResponse,
+} from '@opi_pib/node-utility';
+
+export class SystemInfo {
+	static processRes(
+		proxyRes: IncomingMessage,
+		req: ProxyRequest,
+		res: ServerResponse,
+	) {
+		if (Route.pathMatch(req, '^/system/info$')) {
+			return HttpAdapters.replaceResponseBody(infoElementDto, proxyRes, res);
+		}
 	}
 }
 ```
@@ -77,13 +72,15 @@ Replace response with new value of body from json file
 #### Usage
 
 ```javascript
-processRes(
-	proxyRes: IncomingMessage,
-	req: ProxyRequest,
-	res: ServerResponse,
-): void {
-	if (req._parsedUrl?.pathname.match('^/user$') && req.method === 'GET') {
-		HttpAdapters.replaceResponseBodyFromJsonFile('./userDto.json', proxyRes, res);
+export class SystemInfo {
+	static processRes(
+		proxyRes: IncomingMessage,
+		req: ProxyRequest,
+		res: ServerResponse,
+	) {
+		if (Route.pathMatch(req, '^/system/info$')) {
+			return HttpAdapters.replaceResponseBodyFromJsonFile('./infoElementDto.json', proxyRes, res);
+		}
 	}
 }
 ```
@@ -95,13 +92,15 @@ Replace response with content of file
 #### Usage
 
 ```javascript
-processRes(
-	proxyRes: IncomingMessage,
-	req: ProxyRequest,
-	res: ServerResponse,
-): void {
-	if (req._parsedUrl?.pathname.match('^/user$') && req.method === 'GET') {
-		HttpAdapters.replaceResponseBodyFromFile('./user.pdf', proxyRes, res);
+export class SystemInfo {
+	static processRes(
+		proxyRes: IncomingMessage,
+		req: ProxyRequest,
+		res: ServerResponse,
+	) {
+		if (Route.pathMatch(req, '^/system/info$')) {
+			return HttpAdapters.replaceResponseBodyFromFile('./infoElementDto.pdf', proxyRes, res);
+		}
 	}
 }
 ```
@@ -114,13 +113,13 @@ Convert object into queryString
 
 ```javascript
 const result = HttpAdapters.toQueryString({
-	a: "b",
+	a: 'b',
 	c: 1,
 	d: undefined,
-	e: null,
+	e: null
 });
 
-expect("a=b&c=1").toEqual(result);
+expect('a=b&c=1').toEqual(result);
 ```
 
 ### HttpAdapters.stringify()
@@ -131,10 +130,10 @@ Stringify value
 
 ```javascript
 const result = HttpAdapters.stringify({
-	a: "b",
+	a: 'b',
 	c: 1,
 	d: undefined,
-	e: null,
+	e: null
 });
 
 expect('{"a":"b","c":1}').toEqual(result);

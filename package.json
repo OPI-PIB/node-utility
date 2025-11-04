@@ -1,18 +1,36 @@
 {
 	"name": "@opi_pib/node-utility",
-	"version": "2.3.0",
+	"version": "3.0.0",
 	"description": "Node utility",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"scripts": {
-		"build": "npx rimraf dist && tsc",
-		"lint": "eslint --ignore-path .gitignore **/*.ts --fix",
-		"test": "jest --detectOpenHandles"
+	"main": "dist/cjs/index.js",
+	"module": "dist/esm/index.js",
+	"types": "dist/types/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/types/index.d.ts",
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js"
+		}
 	},
-	"prepublishOnly": "npm run build",
+	"scripts": {
+		"prepare": "husky",
+		"clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+		"build:cjs": "tsc --module CommonJS --outDir dist/cjs",
+		"build:esm": "tsc --module ESNext --outDir dist/esm --declaration true --declarationDir dist/types",
+		"build": "npm run clean && npm run build:cjs && npm run build:esm",
+		"test": "tsx --test src/**/*.spec.ts"
+	},
+	"sideEffects": false,
 	"files": [
-		"dist"
+		"dist",
+		"LICENSE",
+		"README.md"
 	],
+	"lint-staged": {
+		"*.{js,mjs,ts}": "eslint --fix",
+		"*": "prettier -u -w"
+	},
+	"prettier": "@opi_pib/prettier-config-base",
 	"keywords": [
 		"node utility",
 		"node notify",
@@ -22,22 +40,18 @@
 	"license": "MIT",
 	"dependencies": {
 		"@opi_pib/ts-utility": "^2.0.0",
-		"@types/express": "^4.0.0",
-		"chalk": "^4.0.0",
-		"express": "^4.0.0",
-		"fs-extra": "^11.3.0",
-		"http-proxy-middleware": "^2.0.0",
-		"node-http-proxy-json": "^0.1.9"
+		"express": "^5.0.0",
+		"http-proxy": "^1.0.0",
+		"http-proxy-middleware": "^3.0.0"
 	},
 	"devDependencies": {
 		"@opi_pib/eslint-config-base": "^9.0.0",
-		"@types/fs-extra": "^11.0.0",
+		"@opi_pib/prettier-config-base": "^1.0.0",
+		"@types/express": "^5.0.0",
 		"@types/http-proxy": "^1.0.0",
-		"@types/jest": "^30.0.0",
-		"axios": "^1.0.0",
-		"http-proxy": "^1.0.0",
-		"jest": "^30.0.0",
-		"ts-jest": "^29.0.0",
+		"husky": "^9.0.0",
+		"lint-staged": "^16.0.0",
+		"tsx": "^4.0.0",
 		"typescript": "^5.0.0"
 	},
 	"repository": {

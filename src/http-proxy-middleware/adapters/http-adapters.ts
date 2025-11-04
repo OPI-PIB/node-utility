@@ -1,76 +1,70 @@
+import { readFileSync } from 'node:fs';
+
 import { Is } from '@opi_pib/ts-utility';
-import { readFileSync, readJsonSync } from 'fs-extra';
 
 import { Notify } from '../../notify';
 import { IncomingMessage, ServerResponse } from '../proxy-params';
-
-const modifyResponse = require('node-http-proxy-json');
 
 export class HttpAdapters {
 	/**
 	 * Replace response with new value of body
 	 */
-	static replaceResponseBody(
-		newBody: unknown,
-		proxyRes: IncomingMessage,
-		res: ServerResponse
-	) {
-		if (Is.object(newBody)) {
-			modifyResponse(res, proxyRes, () =>
-				HttpAdapters.stringify(newBody)
-			);
-		} else if (Is.boolean(newBody)) {
-			const bodyString = JSON.stringify(newBody);
-			const headers = {
-				...proxyRes.headers,
-				'Content-Type': 'application/json',
-			};
-			if (headers['transfer-encoding']) {
-				delete headers['content-length'];
-			} else {
+	static replaceResponseBody(newBody: unknown, proxyRes: IncomingMessage, res: ServerResponse) {
+		try {
+			const bodyString = HttpAdapters.stringify(newBody);
+
+			const headers = { ...proxyRes.headers };
+			if (!headers['content-type']) {
+				headers['content-type'] = 'application/json';
+			}
+
+			if (!headers['transfer-encoding']) {
 				headers['content-length'] = `${Buffer.byteLength(bodyString)}`;
+			} else {
+				delete headers['content-length'];
 			}
 
 			res.writeHead(200, headers);
-			res.write(bodyString);
-			res.end();
-		} else {
-			modifyResponse(res, proxyRes, () => newBody);
+			res.end(bodyString);
+
+			return true;
+		} catch {
+			Notify.error({ message: 'Failed to replace response body' });
+			res.writeHead(500, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({ error: 'Internal Server Error' }));
+
+			return false;
 		}
 	}
 
 	/**
-	 * Replace response with new value of body from json file
+	 * Replace response with new value of body from JSON file
 	 */
-	static replaceResponseBodyFromJsonFile(
-		newBodyUrl: string,
-		proxyRes: IncomingMessage,
-		res: ServerResponse
-	) {
-		modifyResponse(res, proxyRes, () => {
-			let stringifiedBody = '';
+	static replaceResponseBodyFromJsonFile(newBodyUrl: string, proxyRes: IncomingMessage, res: ServerResponse) {
+		try {
+			const fileContent = readFileSync(newBodyUrl, 'utf-8');
+			const file: unknown = JSON.parse(fileContent);
+			const bodyString = Is.object(file) ? HttpAdapters.stringify(file) : '';
 
-			try {
-				const file = readJsonSync(newBodyUrl);
-				if (Is.object(file)) {
-					stringifiedBody = HttpAdapters.stringify(file);
-				}
-			} catch (e) {
-				Notify.error({ message: `Can't read file: ${newBodyUrl}` });
-			}
+			const headers = { ...proxyRes.headers, 'Content-Type': 'application/json' };
+			headers['content-length'] = `${Buffer.byteLength(bodyString)}`;
 
-			return stringifiedBody;
-		});
+			res.writeHead(200, headers);
+			res.write(bodyString);
+			res.end();
+
+			return true;
+		} catch {
+			Notify.error({ message: `Can't read file: ${newBodyUrl}` });
+
+			return false;
+		}
 	}
 
 	/**
 	 * Replace response with content of file
 	 */
-	static replaceResponseBodyFromFile(
-		fileUrl: string,
-		proxyRes: IncomingMessage,
-		res: ServerResponse
-	) {
+	static replaceResponseBodyFromFile(fileUrl: string, proxyRes: IncomingMessage, res: ServerResponse) {
 		try {
 			const file = readFileSync(fileUrl);
 
@@ -78,50 +72,53 @@ export class HttpAdapters {
 
 			res.writeHead(200, 'OK', proxyRes.headers);
 			res.write(file);
-		} catch (e) {
+			res.end();
+
+			return true;
+		} catch {
 			Notify.error({ message: `Can't read file: ${fileUrl}` });
+
+			return false;
 		}
 	}
 
 	/**
-	 * Convert object into queryString
+	 * Convert object into query string
 	 */
-	static toQueryString(
-		obj: Record<string, string | number | boolean | undefined | null>
-	): string {
-		const body = { ...obj };
-
-		return Object.entries(body)
-			.filter(([key, value]) => Is.defined(value))
-			.map(
-				([key, value]) =>
-					`${encodeURIComponent(key)}=${encodeURIComponent(
-						value as string | number | boolean
-					)}`
-			)
+	static toQueryString(obj: Record<string, string | number | boolean | undefined | null>): string {
+		return Object.entries(obj)
+			.filter(([, value]) => Is.defined(value))
+			.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string | number | boolean)}`)
 			.join('&');
 	}
 
 	/**
 	 * Stringify value
 	 */
-	static stringify(body: Record<string, any>): string {
-		let stringifiedBody = '';
+	static stringify(body: unknown): string {
+		if (!Is.defined(body)) return '';
 
-		if (body !== null && body !== undefined) {
-			try {
-				stringifiedBody = JSON.stringify(
-					Object.fromEntries(
-						Object.entries(body).filter(([key, value]) =>
-							Is.defined(value)
-						)
-					)
-				);
-			} catch (e) {
-				Notify.error({ message: "Can't stringify body" });
+		try {
+			if (Is.boolean(body) || Is.number(body)) {
+				return `${body}`;
 			}
-		}
 
-		return stringifiedBody;
+			if (Is.string(body)) {
+				return body;
+			}
+
+			if (Is.array(body)) {
+				return JSON.stringify(body.map((v) => (v === undefined ? null : v)));
+			}
+
+			if (Is.object(body)) {
+				return JSON.stringify(Object.fromEntries(Object.entries(body).filter(([, value]) => Is.defined(value))));
+			}
+
+			return '';
+		} catch {
+			Notify.error({ message: "Can't stringify body" });
+			return '';
+		}
 	}
 }

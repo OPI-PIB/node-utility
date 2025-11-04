@@ -1,5 +1,3 @@
-import chalk from 'chalk';
-
 interface NotifyProps {
 	message?: string;
 	error?: Error;
@@ -15,8 +13,7 @@ export class Notify {
 		const { message } = props;
 
 		if (message) {
-			// eslint-disable-next-line no-console
-			console.log(`${chalk.black.bgBlueBright(' Info ')} ${message}`);
+			console.log(`ℹ️  ${message}`);
 		}
 	}
 
@@ -27,8 +24,7 @@ export class Notify {
 		const { message } = props;
 
 		if (message) {
-			// eslint-disable-next-line no-console
-			console.log(`${chalk.black.bgGreenBright(' Success ')} ${message}`);
+			console.log(`✅ ${message}`);
 		}
 	}
 
@@ -39,10 +35,7 @@ export class Notify {
 		const { message } = props;
 
 		if (message) {
-			// eslint-disable-next-line no-console
-			console.log(
-				`${chalk.black.bgYellowBright(' Warning ')} ${message}`,
-			);
+			console.log(`⚠️  ${message}`);
 		}
 	}
 
@@ -53,14 +46,12 @@ export class Notify {
 		const { message } = props;
 
 		if (message) {
-			// eslint-disable-next-line no-console
-			console.log(`${chalk.black.bgRedBright(' Error ')} ${message}`);
+			console.log(`❌ ${message}`);
 		}
 
 		const { error } = props;
 
 		if (error) {
-			// eslint-disable-next-line no-console
 			console.error(error);
 		}
 	}
