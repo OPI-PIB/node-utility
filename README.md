@@ -22,11 +22,25 @@ Notify.info({ message: 'message' });
 Notify.error({ message: 'message', error: new Error('Some error') });
 ```
 
+## Mock server
+
+npm scripts
+
+```
+npm i -D @stoplight/prism-cli
+```
+
+```
+"mock:server": "prism mock --port=3010 ./dist/index.json",
+```
+
 ## HttpProxyMiddleware
 
 Proxy middleware for express server
 
 ### Usage
+
+proxy.ts
 
 ```javascript
 import { HttpProxyMiddleware } from '@opi_pib/node-utility';
@@ -34,6 +48,12 @@ import { HttpProxyMiddleware } from '@opi_pib/node-utility';
 const handlers = [SystemInfo.processRes];
 
 HttpProxyMiddleware.run(3010, 3011, handlers);
+```
+
+npm scripts
+
+```
+"mock:server": "ts-node proxy.ts",
 ```
 
 ## HttpAdapters
