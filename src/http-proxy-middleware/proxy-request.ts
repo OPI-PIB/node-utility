@@ -1,6 +1,6 @@
 import { IncomingMessage } from 'http';
 
-import { ParsedQs } from 'qs';
+import type { ParsedQs } from 'qs';
 
 /**
  * Type of request for http-proxy-middleware library
